@@ -6,4 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserJpaRepository : JpaRepository<UserInfo, Long>, UserInfoRepository
+interface UserInfoJpaRepository : JpaRepository<UserInfo, Long>, UserInfoRepository

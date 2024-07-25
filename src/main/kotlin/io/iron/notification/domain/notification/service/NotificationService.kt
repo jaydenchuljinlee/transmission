@@ -1,18 +1,14 @@
 package io.iron.notification.domain.notification.service
 
 import io.iron.notification.domain.log.service.ExceptionLogProducer
-import io.iron.notification.domain.notification.repository.NotificationGroupRepository
-import io.iron.notification.domain.notification.repository.UserNotificationGroupRepository
-import io.iron.notification.domain.notification.repository.jpa.NotificationGroupJpaRepository
 import io.iron.notification.domain.notification.repository.jpa.UserNotificationGroupJpaRepository
 import io.iron.notification.domain.user.UserInfo
-import io.iron.notification.domain.user.repository.UserInfoRepository
-import io.iron.notification.domain.user.repository.jpa.UserJpaRepository
+import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
 import org.springframework.stereotype.Service
 
 @Service
 class NotificationService(
-    private val userRepository: UserJpaRepository,
+    private val userRepository: UserInfoJpaRepository,
     private val userNotificationGroupRepository: UserNotificationGroupJpaRepository,
     private val exceptionLogProducer: ExceptionLogProducer
 ) {

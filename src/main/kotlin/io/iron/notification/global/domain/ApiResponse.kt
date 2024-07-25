@@ -8,7 +8,7 @@ data class ApiResponse(
     val data: Any?
 ) {
     companion object {
-        fun ok(data: Any?, message: String = ""): ApiResponse {
+        fun ok(data: Any? = null, message: String = ""): ApiResponse {
             return ApiResponse(
                 status = HttpStatus.OK.value(),
                 message = message,

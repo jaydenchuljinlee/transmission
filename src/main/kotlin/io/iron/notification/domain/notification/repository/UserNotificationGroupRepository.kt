@@ -1,5 +1,6 @@
 package io.iron.notification.domain.notification.repository
 
+import io.iron.notification.domain.notification.UserNotificationGroup
 import io.iron.notification.domain.user.UserInfo
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -17,4 +18,6 @@ interface UserNotificationGroupRepository {
         @Param("groupName") groupName: String,
         @Param("excludedUserIds") excludedUserIds: List<Long>
     ): List<UserInfo>
+
+    fun findByUserIdAndGroupId(userId: Long, groupId: Long): UserNotificationGroup?
 }

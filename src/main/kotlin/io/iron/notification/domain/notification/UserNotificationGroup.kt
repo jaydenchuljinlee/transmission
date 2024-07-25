@@ -8,7 +8,7 @@ import jakarta.persistence.*
 @Table(name = "user_notification_group")
 class UserNotificationGroup(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
