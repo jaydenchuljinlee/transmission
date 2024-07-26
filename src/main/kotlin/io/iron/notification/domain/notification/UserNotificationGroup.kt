@@ -1,7 +1,6 @@
 package io.iron.notification.domain.notification
 
-import io.iron.notification.global.domain.BaseTimeEntity
-import io.iron.notification.domain.user.UserInfo
+import io.iron.notification.domain.user.domain.UserInfo
 import jakarta.persistence.*
 
 @Entity
@@ -10,12 +9,12 @@ class UserNotificationGroup(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     var user: UserInfo,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    var group: NotificationGroup,
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    var group: NotificationGroup
 ) {
 }
