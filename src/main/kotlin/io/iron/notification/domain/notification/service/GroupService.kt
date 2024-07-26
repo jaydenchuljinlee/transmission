@@ -11,6 +11,11 @@ import io.iron.notification.domain.notification.repository.jpa.UserNotificationG
 import io.iron.notification.domain.user.exception.UserInfoNotFoundException
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
 import jakarta.transaction.Transactional
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.dao.OptimisticLockingFailureException
+import org.springframework.retry.annotation.Backoff
+import org.springframework.retry.annotation.Recover
+import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,7 +29,13 @@ class GroupService(
         groupRepository.findByName(name)?.let {
             throw NotificationGroupDuplicationException("이미 존재하는 그룹 이름입니다: $name ")
         }
-        groupRepository.save(NotificationGroup(name = name))
+
+        // 읽기에 대한 Exception이 사전에 처리 되더라도, 동시에 읽기가 발생할 가능성이 있다
+        try {
+            groupRepository.save(NotificationGroup(name = name))
+        } catch (e: DataIntegrityViolationException) {
+            throw NotificationGroupDuplicationException("이미 존재하는 그룹 이름입니다: $name ")
+        }
     }
 
     @Transactional

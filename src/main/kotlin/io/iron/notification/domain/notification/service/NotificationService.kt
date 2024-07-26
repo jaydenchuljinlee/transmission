@@ -1,16 +1,17 @@
 package io.iron.notification.domain.notification.service
 
-import io.iron.notification.domain.log.service.ExceptionLogProducer
 import io.iron.notification.domain.notification.repository.jpa.UserNotificationGroupJpaRepository
-import io.iron.notification.domain.user.UserInfo
+import io.iron.notification.domain.user.domain.UserInfo
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
+import io.iron.notification.global.external.ExternalService
 import org.springframework.stereotype.Service
 
 @Service
 class NotificationService(
     private val userRepository: UserInfoJpaRepository,
     private val userNotificationGroupRepository: UserNotificationGroupJpaRepository,
-    private val exceptionLogProducer: ExceptionLogProducer
+    private val externalService: ExternalService
+    // private val exceptionLogProducer: ExceptionLogProducer
 ) {
     fun sendExternalAlert(targets: List<String>, severity: String, message: String): Int {
         val notifiedUsers = mutableSetOf<UserInfo>()
@@ -20,7 +21,7 @@ class NotificationService(
         // filter 대신 any를 사용하여 조건을 만족하는 요소를 찾으면 즉시 true를 반환하고 탐색을 종료
         if (targets.any { it == "@all" }) {
             val allUsers = userRepository.findAll().map { it.id }
-            exceptionLogProducer.sendLogToQueue(logMessage)
+            // exceptionLogProducer.sendLogToQueue(logMessage)
             return allUsers.size
         }
 
@@ -45,7 +46,10 @@ class NotificationService(
         }
 
         // 메시지 전송
-        for (userId in notifiedUsers) exceptionLogProducer.sendLogToQueue(logMessage)
+        // for (userId in notifiedUsers) exceptionLogProducer.sendLogToQueue(logMessage)
+        for (userId in notifiedUsers) {
+
+        }
 
         return notifiedUsers.size
     }

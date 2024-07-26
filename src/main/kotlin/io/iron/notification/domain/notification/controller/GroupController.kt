@@ -11,7 +11,7 @@ class GroupController(
 ) {
     @PostMapping
     fun createGroup(@RequestParam groupName: String): ApiResponse {
-        val group = groupService.createGroup(groupName)
+        groupService.createGroup(groupName)
         return ApiResponse.ok(message = "그룹 생성했습니다.")
     }
 
@@ -23,7 +23,7 @@ class GroupController(
         return ApiResponse.ok(null, "사용자를 그룹에 추가했습니다.")
     }
 
-    @PostMapping("/{groupId}/leave")
+    @DeleteMapping("/{groupId}/leave")
     fun leaveGroup(@PathVariable groupId: Long, @RequestParam userId: Long): ApiResponse {
         groupService.leaveGroup(userId, groupId)
         return ApiResponse.ok(null, "사용자를 그룹에서 제거했습니다.")

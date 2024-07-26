@@ -11,5 +11,8 @@ data class NotificationGroup(
 
     @Column(nullable = false, unique = true)
     var name: String,
+
+    @Version
+    var version: Long? = null
 ): BaseTimeEntity() {
 }
