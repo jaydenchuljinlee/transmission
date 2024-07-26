@@ -5,7 +5,7 @@ spring:
   sql:
     init:
       # schema-locations: classpath:sql/domain-schema.sql
-      data-locations: classpath:data-alert.sql
+      # data-locations: classpath:data-alert.sql
       encoding: UTF-8
       mode: always
 
@@ -13,15 +13,12 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
-#      id:
-#        new:
-#          new_generator_mappings: true
     show-sql: true
-    # generate-ddl: false
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.H2Dialect
-#        format_sql: true
+
+external:
+  slack:
+    maxRequestsPerSecond: 10
+    initialDelay: 1000
 
 logging:
   level:
