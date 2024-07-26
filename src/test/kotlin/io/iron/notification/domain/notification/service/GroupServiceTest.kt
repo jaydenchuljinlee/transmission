@@ -8,7 +8,7 @@ import io.iron.notification.domain.notification.exception.UserGroupDuplicationEx
 import io.iron.notification.domain.notification.exception.UserGroupNotFoundException
 import io.iron.notification.domain.notification.repository.jpa.NotificationGroupJpaRepository
 import io.iron.notification.domain.notification.repository.jpa.UserNotificationGroupJpaRepository
-import io.iron.notification.domain.user.UserInfo
+import io.iron.notification.domain.user.domain.UserInfo
 import io.iron.notification.domain.user.exception.UserInfoNotFoundException
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
 import org.junit.jupiter.api.DisplayName
