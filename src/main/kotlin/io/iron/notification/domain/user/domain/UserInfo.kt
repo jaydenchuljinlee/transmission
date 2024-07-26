@@ -1,4 +1,4 @@
-package io.iron.notification.domain.user
+package io.iron.notification.domain.user.domain
 
 import io.iron.notification.global.domain.BaseTimeEntity
 import jakarta.persistence.*
@@ -15,6 +15,8 @@ data class UserInfo(
     @Column(nullable = false, unique = true)
     var email: String,
 
+    @Version
+    var version: Long? = null
 ): BaseTimeEntity() {
 
 }

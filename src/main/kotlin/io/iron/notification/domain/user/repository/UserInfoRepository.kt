@@ -1,8 +1,6 @@
 package io.iron.notification.domain.user.repository
 
-import io.iron.notification.domain.user.UserInfo
-import io.iron.notification.global.repository.BaseRepository
-import java.util.Optional
+import io.iron.notification.domain.user.domain.UserInfo
 
 interface UserInfoRepository {
     fun findByNickname(nickname: String): UserInfo?
