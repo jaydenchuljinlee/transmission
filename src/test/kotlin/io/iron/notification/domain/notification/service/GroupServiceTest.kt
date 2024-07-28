@@ -1,7 +1,7 @@
 package io.iron.notification.domain.notification.service
 
-import io.iron.notification.domain.notification.NotificationGroup
-import io.iron.notification.domain.notification.UserNotificationGroup
+import io.iron.notification.domain.notification.domain.NotificationGroup
+import io.iron.notification.domain.notification.domain.UserNotificationGroup
 import io.iron.notification.domain.notification.exception.NotificationGroupDuplicationException
 import io.iron.notification.domain.notification.exception.NotificationGroupNotFoundException
 import io.iron.notification.domain.notification.exception.UserGroupDuplicationException

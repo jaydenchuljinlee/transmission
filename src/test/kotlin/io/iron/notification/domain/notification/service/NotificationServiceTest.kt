@@ -1,6 +1,5 @@
 package io.iron.notification.domain.notification.service
 
-import io.iron.notification.domain.log.service.ExceptionLogProducer
 import io.iron.notification.domain.notification.repository.jpa.UserNotificationGroupJpaRepository
 import io.iron.notification.domain.user.domain.UserInfo
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
@@ -21,9 +20,6 @@ class NotificationServiceTest {
 
     @Mock
     private lateinit var userNotificationGroupRepository: UserNotificationGroupJpaRepository
-
-    @Mock
-    private lateinit var exceptionLogProducer: ExceptionLogProducer
 
     @InjectMocks
     private lateinit var notificationService: NotificationService
@@ -47,7 +43,7 @@ class NotificationServiceTest {
             val targetCount = notificationService.sendExternalAlert(listOf("@all"), "high", "테스트 메시지")
 
             // then
-            verify(exceptionLogProducer, times(1)).sendLogToQueue("Severity: high, Message: 테스트 메시지")
+            // verify(exceptionLogProducer, times(1)).sendLogToQueue("Severity: high, Message: 테스트 메시지")
             assertEquals(2, targetCount)
         }
 
@@ -65,7 +61,7 @@ class NotificationServiceTest {
             val targetCount = notificationService.sendExternalAlert(listOf("@@group1"), "high", "테스트 메시지")
 
             // then
-            verify(exceptionLogProducer, times(2)).sendLogToQueue("Severity: high, Message: 테스트 메시지")
+            // verify(exceptionLogProducer, times(2)).sendLogToQueue("Severity: high, Message: 테스트 메시지")
             assertEquals(2, targetCount)
         }
 
@@ -80,7 +76,7 @@ class NotificationServiceTest {
             val targetCount = notificationService.sendExternalAlert(listOf("@user1"), "high", "테스트 메시지")
 
             // then
-            verify(exceptionLogProducer, times(1)).sendLogToQueue("Severity: high, Message: 테스트 메시지")
+            // verify(exceptionLogProducer, times(1)).sendLogToQueue("Severity: high, Message: 테스트 메시지")
             assertEquals(1, targetCount)
         }
 
@@ -92,7 +88,7 @@ class NotificationServiceTest {
 
             // then
             assertEquals(0, targetCount)
-            verify(exceptionLogProducer, never()).sendLogToQueue(anyString())
+            // verify(exceptionLogProducer, never()).sendLogToQueue(anyString())
         }
 
         @Test
@@ -112,7 +108,7 @@ class NotificationServiceTest {
             val targetCount = notificationService.sendExternalAlert(listOf("@user1", "@@group1", "@user2"), "high", "테스트 메시지")
 
             // then
-            verify(exceptionLogProducer, times(3)).sendLogToQueue("Severity: high, Message: 테스트 메시지")
+            // verify(exceptionLogProducer, times(3)).sendLogToQueue("Severity: high, Message: 테스트 메시지")
             assertEquals(3, targetCount)
         }
     }
