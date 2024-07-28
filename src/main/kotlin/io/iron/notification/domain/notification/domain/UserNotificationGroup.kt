@@ -1,5 +1,6 @@
-package io.iron.notification.domain.notification
+package io.iron.notification.domain.notification.domain
 
+import io.iron.notification.domain.notification.domain.NotificationGroup
 import io.iron.notification.domain.user.domain.UserInfo
 import jakarta.persistence.*
 

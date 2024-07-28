@@ -1,5 +1,6 @@
-package io.iron.notification.domain.notification.controller.validation
+package io.iron.notification.domain.notification.controller.validation.annotation
 
+import io.iron.notification.domain.notification.controller.validation.ValidTargetPatternValidator
 import jakarta.validation.Constraint
 import jakarta.validation.Payload
 import kotlin.reflect.KClass

@@ -1,6 +1,6 @@
 package io.iron.notification.domain.notification.repository
 
-import io.iron.notification.domain.notification.UserNotificationGroup
+import io.iron.notification.domain.notification.domain.UserNotificationGroup
 import io.iron.notification.domain.user.domain.UserInfo
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

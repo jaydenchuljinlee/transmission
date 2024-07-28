@@ -1,5 +1,6 @@
 package io.iron.notification.domain.notification.controller.validation
 
+import io.iron.notification.domain.notification.controller.validation.annotation.UniqueElements
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 
