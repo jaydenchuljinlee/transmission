@@ -23,5 +23,13 @@ data class ApiResponse(
                 data = null
             )
         }
+
+        fun internalError(message: String, status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR): ApiResponse {
+            return ApiResponse(
+                status = status.value(),
+                message = message,
+                data = null
+            )
+        }
     }
 }

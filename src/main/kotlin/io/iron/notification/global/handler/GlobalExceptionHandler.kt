@@ -13,7 +13,7 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
 class GlobalExceptionHandler: ResponseEntityExceptionHandler() {
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<ApiResponse> {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.badRequest(ex.message ?: "Invalid request"))
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.badRequest(ex.message ?: "적절하지 않은 요청입니다."))
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
@@ -24,5 +24,10 @@ class GlobalExceptionHandler: ResponseEntityExceptionHandler() {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.badRequest(errors))
+    }
+
+    @ExceptionHandler(RuntimeException::class)
+    fun handleRuntimeException(ex: RuntimeException): ResponseEntity<ApiResponse> {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.internalError(ex.message ?: "서버 내부 에러"))
     }
 }

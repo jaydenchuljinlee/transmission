@@ -10,10 +10,6 @@ abstract class BaseTimeEntity(
 
     @Column(nullable = false)
     open var updatedAt: LocalDateTime? = null,
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "CHAR(1) DEFAULT 'N'")
-    var delYn: StateYn = StateYn.N
 ) {
     @PrePersist
     protected fun onCreate() {
