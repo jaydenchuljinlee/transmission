@@ -4,5 +4,4 @@ import io.iron.notification.domain.user.domain.UserInfo
 
 interface UserInfoRepository {
     fun findByNickname(nickname: String): UserInfo?
-    fun findAllByNicknameIn(nicknames: List<String>): List<UserInfo>
 }

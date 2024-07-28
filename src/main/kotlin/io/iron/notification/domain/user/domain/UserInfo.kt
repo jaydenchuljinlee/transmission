@@ -1,6 +1,7 @@
 package io.iron.notification.domain.user.domain
 
 import io.iron.notification.global.domain.BaseTimeEntity
+import io.iron.notification.global.domain.StateYn
 import jakarta.persistence.*
 
 @Entity
@@ -16,7 +17,11 @@ data class UserInfo(
     var email: String,
 
     @Version
-    var version: Long? = null
+    var version: Long? = null,
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "CHAR(1) DEFAULT 'N'")
+    var delYn: StateYn = StateYn.N
 ): BaseTimeEntity() {
 
 }
