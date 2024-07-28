@@ -1,7 +1,7 @@
 package io.iron.notification.domain.notification.controller.request
 
-import io.iron.notification.domain.notification.controller.validation.UniqueElements
-import io.iron.notification.domain.notification.controller.validation.ValidTargetPattern
+import io.iron.notification.domain.notification.controller.validation.annotation.UniqueElements
+import io.iron.notification.domain.notification.controller.validation.annotation.ValidTargetPattern
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 

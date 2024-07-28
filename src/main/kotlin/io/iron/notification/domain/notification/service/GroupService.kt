@@ -1,7 +1,7 @@
 package io.iron.notification.domain.notification.service
 
-import io.iron.notification.domain.notification.NotificationGroup
-import io.iron.notification.domain.notification.UserNotificationGroup
+import io.iron.notification.domain.notification.domain.NotificationGroup
+import io.iron.notification.domain.notification.domain.UserNotificationGroup
 import io.iron.notification.domain.notification.exception.NotificationGroupDuplicationException
 import io.iron.notification.domain.notification.exception.NotificationGroupNotFoundException
 import io.iron.notification.domain.notification.exception.UserGroupDuplicationException
@@ -12,10 +12,6 @@ import io.iron.notification.domain.user.exception.UserInfoNotFoundException
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
 import jakarta.transaction.Transactional
 import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.dao.OptimisticLockingFailureException
-import org.springframework.retry.annotation.Backoff
-import org.springframework.retry.annotation.Recover
-import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 
 @Service

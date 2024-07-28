@@ -1,4 +1,4 @@
-package io.iron.notification.domain.notification
+package io.iron.notification.domain.platform.domain
 
 import io.iron.notification.global.domain.BaseTimeEntity
 import jakarta.persistence.*
