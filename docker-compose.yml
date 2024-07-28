@@ -9,15 +9,6 @@ services:
 #    depends_on:
 #      - mongodb
 
-  mongodb:
-    image: mongo:latest
-    container_name: iron-mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
   redis:
     image: redis:latest
     container_name: iron-redis
