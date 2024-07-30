@@ -11,6 +11,7 @@ import io.iron.notification.domain.notification.repository.jpa.UserNotificationG
 import io.iron.notification.domain.user.domain.UserInfo
 import io.iron.notification.domain.user.exception.UserInfoNotFoundException
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertThrows
@@ -37,8 +38,16 @@ class GroupServiceTest {
     @Mock
     private lateinit var userRepository: UserInfoJpaRepository
 
-    @InjectMocks
     private lateinit var groupService: GroupService
+
+    @BeforeEach
+    fun setUp() {
+        groupService = GroupService(
+            groupRepository,
+            userGroupRepository,
+            userRepository
+        )
+    }
 
     @Nested
     @DisplayName("createGroup 메서드 실행 시")

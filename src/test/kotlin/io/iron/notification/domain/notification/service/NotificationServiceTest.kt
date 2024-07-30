@@ -3,7 +3,9 @@ package io.iron.notification.domain.notification.service
 import io.iron.notification.domain.notification.repository.jpa.UserNotificationGroupJpaRepository
 import io.iron.notification.domain.user.domain.UserInfo
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
+import io.iron.notification.global.external.queue.SlackQueueServer
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,13 +23,24 @@ class NotificationServiceTest {
     @Mock
     private lateinit var userNotificationGroupRepository: UserNotificationGroupJpaRepository
 
-    @InjectMocks
+    @Mock
+    private lateinit var queueServer: SlackQueueServer
+
     private lateinit var notificationService: NotificationService
+
+    @BeforeEach
+    fun setUp() {
+        notificationService = NotificationService(
+            userRepository,
+            userNotificationGroupRepository,
+            queueServer
+        )
+    }
 
 
     @Nested
     @DisplayName("sendExternalAlert 메서드 실행 시")
-    inner class SendExternalAlertTest {
+    internal inner class SendExternalAlertTest {
 
         @Test
         @DisplayName("성공: @all을 사용하여 모든 사용자에게 알림을 보낸다")

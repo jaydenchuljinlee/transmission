@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -34,8 +35,6 @@ class GroupControllerTest {
         @DisplayName("성공: 그룹이 성공적으로 생성되었습니다")
         fun success() {
             // given
-            val group = NotificationGroup(id = 1L, name = "group_1")
-
             willDoNothing().given(groupService).createGroup(anyString())
 
             // when
@@ -92,7 +91,7 @@ class GroupControllerTest {
 
             // when
             val resultActions = mockMvc.perform(
-                post("/v1/groups/1/leave")
+                delete("/v1/groups/1/leave")
                     .contentType(MediaType.APPLICATION_JSON)
                     .param("userId", "1")
             )
