@@ -1,6 +1,7 @@
 package io.iron.notification.domain.user.service
 
 import io.iron.notification.domain.user.domain.UserInfo
+import io.iron.notification.domain.user.domain.UserSlackInfo
 import io.iron.notification.domain.user.exception.UserInfoDuplicatedException
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito
+import org.mockito.BDDMockito.willDoNothing
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
@@ -20,11 +23,14 @@ class UserInfoServiceTest {
     @Mock
     private lateinit var userInfoRepository: UserInfoJpaRepository
 
+    @Mock
+    private lateinit var userSlackCacheService: UserSlackCacheService
+
     private lateinit var userInfoService: UserInfoService
 
     @BeforeEach
     fun setUp() {
-        userInfoService = UserInfoService(userInfoRepository)
+        userInfoService = UserInfoService(userInfoRepository, userSlackCacheService)
     }
 
     @Nested
@@ -37,14 +43,27 @@ class UserInfoServiceTest {
             val email = "test@example.com"
             val userInfo = UserInfo(id = 0, nickname = nickname, email = email)
 
-            `when`(userInfoRepository.save(userInfo)).thenReturn(userInfo)
+            val userCacheInfo = UserSlackInfo(
+                id = userInfo.id,
+                email = userInfo.email,
+                accessToken = "USER${userInfo.id}-ACCESS-TOKEN",
+                expiresIn = "3600",
+                refreshToken = "USER${userInfo.id}-REFRESH-TOKEN",
+                channel = "slack"
+            )
+
+            `when`(userInfoRepository.findByEmailOrNickname(email, nickname)).thenReturn(null)
+
+            `when`(userInfoRepository.saveAndFlush(userInfo)).thenReturn(userInfo)
+
+            willDoNothing().given(userSlackCacheService).save(userCacheInfo)
 
             val createdUser = userInfoService.create(nickname, email)
 
             assertNotNull(createdUser)
             assertEquals(nickname, createdUser.nickname)
             assertEquals(email, createdUser.email)
-            verify(userInfoRepository, times(1)).save(userInfo)
+            verify(userInfoRepository, times(1)).saveAndFlush(userInfo)
         }
 
         @Test
