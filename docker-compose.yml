@@ -1,16 +1,30 @@
 version: '3'
 services:
-#  notification-service:
-#    build: .
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=default
-#    depends_on:
-#      - mongodb
+  notification-service:
+    volumes:
+      - .:/app
+    working_dir: /app
+    image: openjdk:17-slim
+    container_name: notification-spring-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+    command: ["java", "-jar", "/app/build/libs/notification-0.0.1-SNAPSHOT.jar", "--spring.profiles.active=local"]
+    # command: ["ls ./build"]
+    depends_on:
+      - redis
+    networks:
+      - app-network
 
   redis:
     image: redis:latest
-    container_name: iron-redis
+    container_name: notification-redis
     ports:
-      - "6381:6379"
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
