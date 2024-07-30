@@ -30,6 +30,7 @@ Spring Kotlin 기반의 외부(슬랙, 텔레그림) 알림 서비스
 - [시스템 아키텍처](#시스템-아키텍처)
 - [ERD](#erd)
 - [API 명세서](#api-명세서)
+- [개선사항](#개선사항)
 
 ## 실행방법
 1. 저장소 클론 [비공개]
@@ -41,8 +42,15 @@ Spring Kotlin 기반의 외부(슬랙, 텔레그림) 알림 서비스
     ```
 3. 애플리케이션 실행
     ```bash
-    sh build-local.sh
+    sh run.sh
     ```
+4. 실행 시 주의사항
+   - Server(8080) / Redis(6379) 현재 사용중일 확률이 높은 Port입니다. Container를 띄울 때 주의하시길 바랍니다.
+   - API 요청에 대한 파라미터로 `@all` 이외의 사용자는 `user_info` 테이블에서 `nickname`확인 가능합니다.
+   - `@@groupName`을 사용하기위한 기본 그룹 10개를 생성했습니다. 추가 API 또한 제공하고 있고 `notification_group` 혹은 `user_notification_group`에서 확인 가능합니다.
+5. 과제 결과 확인
+   - API의 경우 `/v1/alerts` 요청의 결과값이 단순히 '전송요청'에 대한 결과값만 반환하게 됩니다.
+   - 저는 한 발 더 나아가서 요청량 처리와 요청에 대한 상태 기록을 `notification_delivery_log`에 기록함을 통해 추후 재시도를 고려했습니다.
 
 ## 시스템 아키텍처
 
@@ -78,7 +86,7 @@ Spring Kotlin 기반의 외부(슬랙, 텔레그림) 알림 서비스
     - 확장을 고려했을 때, 문서형 저장소에 저장하고 싶습니다.
 - 외부 서비스 초당 처리 제한
     - 임시 Queue 서버 클래스 생성
-        - 초당 처리 제한이 있기 때문에 바로 접근하는 것이 아니라, 이를 중개할 수 있는 서버가 필요
+        - 초당 처리 제한이 있기 때문에 바로 접근하는 것이 아니라, 이를 중개할 수 있는 서버가 필요하여 구현
     - Queue 서버 내부에서 Rate Limiting 전략을 통해 안정성있게 처리
         - Queue 서버는 N초에 한 번씩 Task를 실행하면서 Queue에서 M개를 뽑아 처리한다
         - 재시도 처리는 요구사항에서 배제되었기 때문에 Backoff 전략은 제외
@@ -92,6 +100,47 @@ Spring Kotlin 기반의 외부(슬랙, 텔레그림) 알림 서비스
 
 ## API 명세서
 
+### 사용자 생성 API
+- **URL**: `/v1/users`
+- **Method**: POST
+- **Response**:
+    ```json
+    {
+        "status": 200,
+        "message": "사용자를 생성했습니다.",
+        "data": {
+                  "id": 102,
+                  "nickname": "cheoljin2",
+                  "email": "ironjin923@gmail.com",
+                  "version": 0,
+                  "delYn": "N",
+                  "createdAt": "2024-07-30T13:42:40.437002545",
+                  "updatedAt": "2024-07-30T13:42:40.437135087"
+                }
+    }
+    ```
+### 사용자 목록 조회 API
+- **URL**: `/v1/users`
+- **Method**: GET
+- **Response**:
+    ```json
+    {
+        "status": 200,
+        "message": "사용자 목록을 조회했습니다.",
+        "data": [
+                  {
+                    "id": 102,
+                    "nickname": "cheoljin2",
+                    "email": "ironjin923@gmail.com",
+                    "version": 0,
+                    "delYn": "N",
+                    "createdAt": "2024-07-30T13:42:40.437002545",
+                    "updatedAt": "2024-07-30T13:42:40.437135087"
+                }
+        ]
+    }
+    ```
+
 ### 그룹 생성 API
 - **URL**: `/v1/groups?groupName={group_name}`
 - **Method**: POST
@@ -100,7 +149,13 @@ Spring Kotlin 기반의 외부(슬랙, 텔레그림) 알림 서비스
     {
         "status": 200,
         "message": "그룹을 생성했습니다.",
-        "data": null
+        "data": {
+                  "id": 1,
+                  "name": "group_1",
+                  "version": 0,
+                  "createdAt": "2024-07-30T13:45:08.818697502",
+                  "updatedAt": "2024-07-30T13:45:08.818725169"
+                }
     }
     ```
 
@@ -145,3 +200,10 @@ Spring Kotlin 기반의 외부(슬랙, 텔레그림) 알림 서비스
         "userCount": "128"
     }
     ```
+
+## 개선사항
+- Queue 서버 관련
+  - Queue 서버 내부 작업 처리 로직과 스케줄링 로직의 혼합되어 테스트가 어려운 상황이었습니다.
+  - 이를 작업 처리 - 스케줄링 클래스로 분리하여 구현했으면 더 명확한 클래스 개념이 잡혔을텐데 아쉽습니다.
+- Repository 관련
+  - 확장성을 고려하여 인터페이스로 사용할 메서드만 구현하는 방법을 처리하지 못한게 아쉽습니다.
