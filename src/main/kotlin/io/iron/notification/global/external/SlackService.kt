@@ -1,7 +1,10 @@
 package io.iron.notification.global.external
 
+import io.iron.notification.global.config.properties.SlackProperties
+import io.iron.notification.global.external.exception.SlackTimeoutException
 import io.iron.notification.global.external.exception.SlackTooManyRequestsException
-import org.springframework.beans.factory.annotation.Value
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import java.time.Instant
@@ -10,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @Component
 class SlackService(
-    @Value("\${external.slack.maxRequestsPerSecond}") private var maxRequestsPerSecond: Int = 10
+    private val slackProperties: SlackProperties
 ) {
     private var requestCounts = ConcurrentHashMap<Long, AtomicInteger>()
 
@@ -21,22 +24,24 @@ class SlackService(
      * @param headers 요청 헤더
      * @param body 요청 바디
      * @throws TooManyRequestsException 요청이 초당 최대 요청 수를 초과했을 때 발생하는 예외
+     * @throws SlackTimeoutException 요청이 초당 최대 시간을 초과했을 때 발생하는 예외
      */
     @Throws(SlackTooManyRequestsException::class)
-    fun <T> send(url: String, headers: HttpHeaders, body: T) {
-        val currentSecond = Instant.now().epochSecond
-        val currentCount = requestCounts.computeIfAbsent(currentSecond) { AtomicInteger(0) }.incrementAndGet()
+    suspend fun <T> send(url: String, headers: HttpHeaders, body: T) {
+        try {
+            withTimeout(slackProperties.timeout) {
+                val currentSecond = Instant.now().epochSecond
+                val currentCount = requestCounts.computeIfAbsent(currentSecond) { AtomicInteger(0) }.incrementAndGet()
 
-        if (currentCount > maxRequestsPerSecond) {
-            throw SlackTooManyRequestsException("초당 최대 요청 수를 초과했습니다: $maxRequestsPerSecond")
+                if (currentCount > slackProperties.maxRequestsPerSecond) {
+                    throw SlackTooManyRequestsException("초당 최대 요청 수 초과: ${slackProperties.maxRequestsPerSecond}")
+                }
+
+                // 초당 요청 수 관리를 위한 이전 시각 데이터 정리
+                requestCounts.keys.removeIf { it < currentSecond }
+            }
+        } catch (e: TimeoutCancellationException) {
+            throw SlackTimeoutException("최대 요청 시간 초과: ${slackProperties.timeout}")
         }
-
-        // 요청 처리 로직 (예: 로깅, 실제 HTTP 요청 등)
-        println("Sending request to $url with headers $headers and body $body")
-
-        // 초당 요청 수 관리를 위한 이전 시각 데이터 정리
-        requestCounts.keys.removeIf { it < currentSecond }
-
-        // println(currentCount)
     }
 }
