@@ -1,10 +1,12 @@
 package io.iron.notification.domain.notification.controller
 
+import io.iron.notification.domain.notification.domain.NotificationGroup
 import io.iron.notification.domain.notification.service.GroupService
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.willDoNothing
 import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,8 +35,14 @@ class GroupControllerTest {
         @Test
         @DisplayName("성공: 그룹이 성공적으로 생성되었습니다")
         fun success() {
+            val groupName = "group_1"
+            val notificationGroup = NotificationGroup(
+                id = 1L,
+                name = groupName
+            )
+
             // given
-            willDoNothing().given(groupService).createGroup(anyString())
+            given(groupService.createGroup(anyString())).willReturn(notificationGroup)
 
             // when
             val resultActions = mockMvc.perform(

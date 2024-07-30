@@ -21,14 +21,14 @@ class GroupService(
     private val userRepository: UserInfoJpaRepository
 ) {
     @Transactional
-    fun createGroup(name: String) {
+    fun createGroup(name: String): NotificationGroup {
         groupRepository.findByName(name)?.let {
             throw NotificationGroupDuplicationException("이미 존재하는 그룹 이름입니다: $name ")
         }
 
         // 읽기에 대한 Exception이 사전에 처리 되더라도, 동시에 읽기가 발생할 가능성이 있다
         try {
-            groupRepository.save(NotificationGroup(name = name))
+            return groupRepository.save(NotificationGroup(name = name))
         } catch (e: DataIntegrityViolationException) {
             throw NotificationGroupDuplicationException("이미 존재하는 그룹 이름입니다: $name ")
         }

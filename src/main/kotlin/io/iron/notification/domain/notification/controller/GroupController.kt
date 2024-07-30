@@ -11,8 +11,8 @@ class GroupController(
 ) {
     @PostMapping
     fun createGroup(@RequestParam groupName: String): ApiResponse {
-        groupService.createGroup(groupName)
-        return ApiResponse.ok(message = "그룹 생성했습니다.")
+        val newGroup = groupService.createGroup(groupName)
+        return ApiResponse.ok(message = "그룹 생성했습니다.", data = newGroup)
     }
 
     @PostMapping("/{groupId}/join")
