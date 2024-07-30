@@ -88,7 +88,7 @@ Spring Kotlin 기반의 외부(슬랙, 텔레그림) 알림 서비스
 
 ## ERD
 
-![ERD Diagram](resource/img/erd_diagram.png)
+![ERD Diagram](resources/img/erd_diagram.png)
 
 ## API 명세서
 
