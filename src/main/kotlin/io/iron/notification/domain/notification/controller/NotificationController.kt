@@ -25,5 +25,4 @@ class NotificationController(
         val targetCount = notificationService.sendExternalAlert(request.target, request.severity, request.message)
         return ApiResponse.ok(message = "알림 메시지 전송 성공", data = targetCount)
     }
-
 }
