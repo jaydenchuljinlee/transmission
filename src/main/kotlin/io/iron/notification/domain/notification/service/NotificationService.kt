@@ -1,7 +1,5 @@
 package io.iron.notification.domain.notification.service
 
-import io.iron.notification.domain.notification.domain.NotificationDeliveryLog
-import io.iron.notification.domain.notification.domain.enumeration.NotificationStatus
 import io.iron.notification.domain.notification.repository.jpa.UserNotificationGroupJpaRepository
 import io.iron.notification.domain.user.domain.UserInfo
 import io.iron.notification.domain.user.repository.jpa.UserInfoJpaRepository
