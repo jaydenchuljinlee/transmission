@@ -6,9 +6,11 @@ import io.iron.notification.domain.user.domain.enumeration.TokenType
 import io.iron.notification.domain.user.service.UserSlackCacheService
 import io.iron.notification.global.config.properties.SlackProperties
 import io.iron.notification.global.external.SlackService
+import io.iron.notification.global.external.request.RequestData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -57,6 +59,9 @@ class SlackQueueServerTest {
             slackService = slackService,
             notificationDeliveryLogService = notificationDeliveryLogService
         )
+
+        // 큐를 초기화
+        ReflectionTestUtils.setField(slackQueueServer, "queue", LinkedBlockingQueue<RequestData>())
     }
 
     @Nested
@@ -108,6 +113,9 @@ class SlackQueueServerTest {
                 delay(2000L) // 실제 지연 시간
             }
 
+            // 비동기 작업이 완료될 때까지 기다리기
+            advanceTimeBy(2000L) // 이 코드가 비동기 작업을 기다리도록 합니다.
+
             verify(slackService).send(slackProperties.host, headers1, body1)
             verify(slackService).send(slackProperties.host, headers2, body2)
         }
@@ -124,7 +132,6 @@ class SlackQueueServerTest {
                 channel = "channel1",
                 tokenType = TokenType.BEARER
             )
-            // `when`(userCacheService.get(userSlackTokenInfo.id)).thenReturn(Optional.of(userSlackTokenInfo))
 
             // 초당 10개의 요청을 추가
             for (i in 1..10) {
@@ -135,27 +142,10 @@ class SlackQueueServerTest {
             for (i in 11..20) {
                 slackQueueServer.makeRequest(userSlackTokenInfo.id, "Test Message $i", uuid)
             }
-//
-//            // verify(userCacheService, times(10)).get(userSlackTokenInfo.id)
-//
-//            // 예외가 발생하지 않는지 확인
-//            assertTrue(true)
-//
-//            // 스케줄러가 첫 10개의 요청을 처리할 시간을 줌
-//            withContext(Dispatchers.Default) {
-//                delay(2000L) // 실제 지연 시간
-//            }
-//
-//
-//
-//            // 다시 스케줄러가 처리할 시간을 줌
-//            withContext(Dispatchers.Default) {
-//                delay(2000L) // 실제 지연 시간
-//            }
 
+            // 비동기 작업이 완료될 때까지 기다리기
+            advanceTimeBy(2000L) // 이 코드가 비동기 작업을 기다리도록 합니다.
 
         }
     }
-
-
 }

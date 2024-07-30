@@ -1,6 +1,5 @@
 package io.iron.notification.domain.notification.controller
 
-import io.iron.notification.domain.notification.domain.NotificationGroup
 import io.iron.notification.domain.notification.service.GroupService
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

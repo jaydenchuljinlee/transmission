@@ -82,21 +82,6 @@ class DataInitializationTest {
             assertTrue(allCaptured.contains(expectedSlackInfos1))
             assertTrue(allCaptured.contains(expectedSlackInfos2))
 
-//            val expectedSlackInfos1 = listOf(
-//                UserSlackInfo(id = 1L, email = user1.email, accessToken = "USER${user1.id}-ACCESS-TOKEN", expiresIn = "3600", refreshToken = "USER${user1.id}-REFRESH-TOKEN", channel = slackChannel1.url)
-//            )
-//
-//            val expectedSlackInfos2 = listOf(
-//                UserSlackInfo(id = 2L, email = user2.email, accessToken = "USER${user2.id}-ACCESS-TOKEN", expiresIn = "3600", refreshToken = "USER${user2.id}-REFRESH-TOKEN", channel = slackChannel2.url)
-//            )
-//
-//            verify(userSlackCacheService).saveAll(argThat { list ->
-//                list != null && list.containsAll(expectedSlackInfos1) && list.size == expectedSlackInfos1.size
-//            })
-//
-//            verify(userSlackCacheService).saveAll(argThat { list ->
-//                list != null && list.containsAll(expectedSlackInfos2) && list.size == expectedSlackInfos2.size
-//            })
         }
     }
 }
