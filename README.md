@@ -41,7 +41,7 @@ Spring Kotlin 기반의 외부(슬랙, 텔레그림) 알림 서비스
     ```
 3. 애플리케이션 실행
     ```bash
-    docker-compose up .
+    sh build-local.sh
     ```
 
 ## 시스템 아키텍처
