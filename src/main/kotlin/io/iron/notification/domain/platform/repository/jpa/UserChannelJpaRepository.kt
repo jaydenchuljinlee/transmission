@@ -1,14 +1,13 @@
 package io.iron.notification.domain.platform.repository.jpa
 
 import io.iron.notification.domain.platform.domain.UserChannel
-import io.iron.notification.domain.platform.repository.UserChannelRepository
 import io.lettuce.core.dynamic.annotation.Param
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserChannelJpaRepository: JpaRepository<UserChannel, Long>, UserChannelRepository {
+interface UserChannelJpaRepository: JpaRepository<UserChannel, Long> {
     @Query("""
         SELECT uc 
         FROM UserChannel uc 
