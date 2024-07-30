@@ -13,7 +13,7 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
-    show-sql: true
+    # show-sql: true
 
 external:
   slack:
@@ -21,13 +21,3 @@ external:
     maxRequestsPerSecond: 10
     initialDelay: 1000
     timeout: 10000
-
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
